@@ -1036,12 +1036,12 @@
         submittedAt: new Date().toISOString()
       };
 
-      const gasResponse = await fetch(APPS_SCRIPT_URL, {
+      await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
+        mode: 'no-cors',
         body: JSON.stringify(payload)
       });
-
-      if (!gasResponse.ok) throw new Error('Server error — please try again.');
+      // no-cors response is opaque — request is sent, we just can't read the response
 
       // ── STEP 2: Send thank-you email via EmailJS ──
       const awardTypes = awardType.split(', ');
