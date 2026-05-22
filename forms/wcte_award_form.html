@@ -414,6 +414,30 @@
   }
   .file-preview-item-remove:hover { color: var(--error); }
 
+  .add-photo-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 13px 20px;
+    width: 100%;
+    background: rgba(233,30,140,0.07);
+    border: 1.5px dashed rgba(233,30,140,0.4);
+    border-radius: 10px;
+    color: var(--pink-light);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .add-photo-pill:hover, .add-photo-pill:active {
+    background: rgba(233,30,140,0.14);
+    border-color: rgba(233,30,140,0.65);
+  }
+
   /* ── CONSENT ── */
   .consent-row {
     display: flex;
@@ -782,6 +806,8 @@
           <div class="file-drop-sub">Select multiple files if you received more than one award</div>
         </div>
         <div class="file-preview-list" id="filePreviewList"></div>
+        <input type="file" id="certPhotoAdd" accept="image/jpeg,image/png,image/heic,application/pdf" style="display:none">
+        <button type="button" class="add-photo-pill" id="addPhotoPill" style="display:none">📷 Add another photo</button>
         <div class="field-error" id="err-certPhoto">Please upload at least one photo of your certificate or invitation.</div>
       </div>
     </div>
@@ -915,8 +941,38 @@
   const fileInput       = document.getElementById('certPhoto');
   const fileDrop        = document.getElementById('fileDrop');
   const filePreviewList = document.getElementById('filePreviewList');
+  const addPhotoPill    = document.getElementById('addPhotoPill');
+  const certPhotoAdd    = document.getElementById('certPhotoAdd');
 
   fileInput.addEventListener('change', handleFileSelect);
+
+  // Pill click → trigger single-file picker (no multiple = cleaner camera sheet on mobile)
+  addPhotoPill.addEventListener('click', function() { certPhotoAdd.click(); });
+
+  certPhotoAdd.addEventListener('change', function() {
+    if (!certPhotoAdd.files || certPhotoAdd.files.length === 0) return;
+    const newFile = certPhotoAdd.files[0];
+    if (newFile.size > 10 * 1024 * 1024) {
+      showFieldError('certPhoto', '"' + newFile.name + '" is too large. Each file must be under 10MB.');
+      certPhotoAdd.value = ''; return;
+    }
+    if (fileInput.files.length >= 3) {
+      showFieldError('certPhoto', 'Maximum 3 photos allowed — one per award.');
+      certPhotoAdd.value = ''; return;
+    }
+    const dt = new DataTransfer();
+    [...fileInput.files, newFile].forEach(function(f) { dt.items.add(f); });
+    fileInput.files = dt.files;
+    certPhotoAdd.value = '';
+    renderFilePreviews();
+    const awardsCount = document.querySelectorAll('input[name="awardType"]:checked').length;
+    if (awardsCount > 0 && fileInput.files.length !== awardsCount) {
+      showFieldError('certPhoto', 'You selected ' + awardsCount + ' award' + (awardsCount > 1 ? 's' : '') + ' — please upload exactly ' + awardsCount + ' photo' + (awardsCount > 1 ? 's' : '') + ' (currently ' + fileInput.files.length + ' uploaded).');
+    } else {
+      clearFieldError('certPhoto');
+    }
+    updateProgress();
+  });
 
   ['dragover','dragleave','drop'].forEach(evt => {
     fileDrop.addEventListener(evt, e => {
@@ -930,6 +986,12 @@
       }
     });
   });
+
+  function syncUploadUI() {
+    const count = fileInput.files.length;
+    fileDrop.style.display      = count > 0 ? 'none' : '';
+    addPhotoPill.style.display  = count > 0 && count < 3 ? '' : 'none';
+  }
 
   function renderFilePreviews() {
     filePreviewList.innerHTML = '';
@@ -950,11 +1012,11 @@
         [...fileInput.files].forEach(function(f, i) { if (i !== idx) dt.items.add(f); });
         fileInput.files = dt.files;
         renderFilePreviews();
-        if (fileInput.files.length === 0) fileDrop.style.display = '';
+        syncUploadUI();
         updateProgress();
       });
     });
-    fileDrop.style.display = files.length > 0 ? 'none' : '';
+    syncUploadUI();
   }
 
   function handleFileSelect() {
