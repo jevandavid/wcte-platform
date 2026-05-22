@@ -248,12 +248,26 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+    align-items: stretch;
   }
-  @media (max-width: 540px) { .award-selector { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) {
+    .award-selector { grid-template-columns: 1fr; }
+    .award-opt-label {
+      flex-direction: row !important;
+      text-align: left !important;
+      justify-content: flex-start !important;
+      gap: 14px !important;
+      padding: 14px 16px !important;
+    }
+    .award-icon { font-size: 22px !important; min-width: 26px; }
+    .award-name { font-size: 12px !important; }
+    .award-desc { font-size: 10px !important; }
+  }
 
   .award-opt {
     position: relative;
     cursor: pointer;
+    display: flex;
   }
   .award-opt input[type=checkbox] {
     position: absolute;
@@ -264,6 +278,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     text-align: center;
     gap: 8px;
     padding: 18px 12px;
@@ -273,6 +288,7 @@
     cursor: pointer;
     transition: all 0.2s;
     font-family: 'Montserrat', sans-serif;
+    flex: 1;
   }
   .award-opt-label:hover { border-color: rgba(124,79,212,0.5); background: rgba(124,79,212,0.1); }
   .award-opt input[type=checkbox]:checked + .award-opt-label {
@@ -368,20 +384,24 @@
     margin-bottom: 4px;
   }
   .file-drop-sub { font-size: 11px; color: var(--text-dim); }
-  .file-preview {
-    display: none;
+  .file-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .file-preview-item {
+    display: flex;
     align-items: center;
     gap: 12px;
     background: rgba(34,197,94,0.08);
     border: 1px solid rgba(34,197,94,0.25);
     border-radius: 8px;
-    padding: 12px 16px;
-    margin-top: 10px;
+    padding: 10px 14px;
   }
-  .file-preview.show { display: flex; }
-  .file-preview-icon { font-size: 20px; }
-  .file-preview-name { font-size: 13px; color: var(--success); flex: 1; font-weight: 600; }
-  .file-preview-remove {
+  .file-preview-item-icon { font-size: 18px; }
+  .file-preview-item-name { font-size: 13px; color: var(--success); flex: 1; font-weight: 600; word-break: break-all; }
+  .file-preview-item-remove {
     background: none;
     border: none;
     color: var(--text-dim);
@@ -390,8 +410,9 @@
     padding: 2px 6px;
     border-radius: 4px;
     transition: color 0.2s;
+    flex-shrink: 0;
   }
-  .file-preview-remove:hover { color: var(--error); }
+  .file-preview-item-remove:hover { color: var(--error); }
 
   /* ── CONSENT ── */
   .consent-row {
@@ -753,19 +774,15 @@
       <div class="card-title">Step 5 · Certificate / Invitation Photo</div>
 
       <div class="field">
-        <label>Upload a Photo of Your Certificate or Invitation <span class="req">*</span> <span class="hint">— JPG, PNG, PDF up to 10MB</span></label>
+        <label>Upload Photo(s) of Your Certificate(s) <span class="req">*</span> <span class="hint">— JPG, PNG, HEIC, or PDF · max 10MB each · up to 3 files</span></label>
         <div class="file-drop" id="fileDrop">
-          <input type="file" id="certPhoto" name="certPhoto" accept="image/jpeg,image/png,image/heic,application/pdf" required>
+          <input type="file" id="certPhoto" name="certPhoto" accept="image/jpeg,image/png,image/heic,application/pdf" multiple required>
           <div class="file-drop-icon">📷</div>
           <div class="file-drop-text">Tap to upload or drag & drop</div>
-          <div class="file-drop-sub">JPEG, PNG, HEIC, or PDF · max 10MB</div>
+          <div class="file-drop-sub">Select multiple files if you received more than one award</div>
         </div>
-        <div class="file-preview" id="filePreview">
-          <span class="file-preview-icon">📎</span>
-          <span class="file-preview-name" id="filePreviewName">—</span>
-          <button type="button" class="file-preview-remove" id="fileRemove" title="Remove">✕</button>
-        </div>
-        <div class="field-error" id="err-certPhoto">Please upload a photo of your certificate or invitation.</div>
+        <div class="file-preview-list" id="filePreviewList"></div>
+        <div class="field-error" id="err-certPhoto">Please upload at least one photo of your certificate or invitation.</div>
       </div>
     </div>
 
@@ -871,52 +888,96 @@
     updateProgress();
   }
 
+  function updatePhotoHint() {
+    const count = document.querySelectorAll('input[name="awardType"]:checked').length;
+    const sub = document.querySelector('.file-drop-sub');
+    if (!sub) return;
+    if (count === 0)      sub.textContent = 'Select multiple files if you received more than one award';
+    else if (count === 1) sub.textContent = 'Upload 1 certificate photo for your selected award';
+    else                  sub.textContent = 'Upload ' + count + ' certificate photos — one per award selected';
+    // Re-validate live if files already chosen
+    if (fileInput.files && fileInput.files.length > 0) {
+      if (fileInput.files.length !== count) {
+        showFieldError('certPhoto', 'You selected ' + count + ' award' + (count > 1 ? 's' : '') + ' — please upload exactly ' + count + ' photo' + (count > 1 ? 's' : '') + ' (currently ' + fileInput.files.length + ' uploaded).');
+      } else {
+        clearFieldError('certPhoto');
+      }
+    }
+  }
+
   document.querySelectorAll('input[name="awardType"]').forEach(cb => {
-    cb.addEventListener('change', updateAwardCommitment);
+    cb.addEventListener('change', function() { updateAwardCommitment(); updatePhotoHint(); });
   });
 
   // ═══════════════════════════════════════
   // FILE UPLOAD HANDLING
   // ═══════════════════════════════════════
-  const fileInput    = document.getElementById('certPhoto');
-  const fileDrop     = document.getElementById('fileDrop');
-  const filePreview  = document.getElementById('filePreview');
-  const filePreviewName = document.getElementById('filePreviewName');
-  const fileRemove   = document.getElementById('fileRemove');
+  const fileInput       = document.getElementById('certPhoto');
+  const fileDrop        = document.getElementById('fileDrop');
+  const filePreviewList = document.getElementById('filePreviewList');
 
   fileInput.addEventListener('change', handleFileSelect);
-  fileRemove.addEventListener('click', () => {
-    fileInput.value = '';
-    filePreview.classList.remove('show');
-    fileDrop.style.display = '';
-    updateProgress();
-  });
 
   ['dragover','dragleave','drop'].forEach(evt => {
     fileDrop.addEventListener(evt, e => {
       e.preventDefault();
       fileDrop.classList.toggle('drag-over', evt === 'dragover');
-      if (evt === 'drop' && e.dataTransfer.files[0]) {
+      if (evt === 'drop' && e.dataTransfer.files.length > 0) {
         const dt = new DataTransfer();
-        dt.items.add(e.dataTransfer.files[0]);
+        [...fileInput.files, ...e.dataTransfer.files].slice(0, 3).forEach(f => dt.items.add(f));
         fileInput.files = dt.files;
         handleFileSelect();
       }
     });
   });
 
+  function renderFilePreviews() {
+    filePreviewList.innerHTML = '';
+    const files = [...fileInput.files];
+    files.forEach((f, index) => {
+      const item = document.createElement('div');
+      item.className = 'file-preview-item';
+      item.innerHTML =
+        '<span class="file-preview-item-icon">📎</span>' +
+        '<span class="file-preview-item-name">' + f.name + ' (' + (f.size / 1024).toFixed(0) + ' KB)</span>' +
+        '<button type="button" class="file-preview-item-remove" data-index="' + index + '" title="Remove">✕</button>';
+      filePreviewList.appendChild(item);
+    });
+    filePreviewList.querySelectorAll('.file-preview-item-remove').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const idx = parseInt(this.dataset.index);
+        const dt = new DataTransfer();
+        [...fileInput.files].forEach(function(f, i) { if (i !== idx) dt.items.add(f); });
+        fileInput.files = dt.files;
+        renderFilePreviews();
+        if (fileInput.files.length === 0) fileDrop.style.display = '';
+        updateProgress();
+      });
+    });
+    fileDrop.style.display = files.length > 0 ? 'none' : '';
+  }
+
   function handleFileSelect() {
-    const f = fileInput.files[0];
-    if (!f) return;
-    if (f.size > 10 * 1024 * 1024) {
-      showFieldError('certPhoto', 'File is too large. Please upload a file under 10MB.');
-      fileInput.value = '';
-      return;
+    const files = [...fileInput.files];
+    if (files.length === 0) return;
+    if (files.length > 3) {
+      showFieldError('certPhoto', 'Please upload a maximum of 3 files (one per award).');
+      fileInput.value = ''; return;
     }
-    filePreviewName.textContent = f.name + ' (' + (f.size / 1024).toFixed(0) + ' KB)';
-    filePreview.classList.add('show');
-    fileDrop.style.display = 'none';
-    clearFieldError('certPhoto');
+    for (const f of files) {
+      if (f.size > 10 * 1024 * 1024) {
+        showFieldError('certPhoto', '"' + f.name + '" is too large. Each file must be under 10MB.');
+        fileInput.value = ''; return;
+      }
+    }
+    renderFilePreviews();
+    // Live count check against selected awards
+    const awardsCount = document.querySelectorAll('input[name="awardType"]:checked').length;
+    if (awardsCount > 0 && files.length !== awardsCount) {
+      showFieldError('certPhoto', 'You selected ' + awardsCount + ' award' + (awardsCount > 1 ? 's' : '') + ' — please upload exactly ' + awardsCount + ' photo' + (awardsCount > 1 ? 's' : '') + ' (currently ' + files.length + ' uploaded).');
+    } else {
+      clearFieldError('certPhoto');
+    }
     updateProgress();
   }
 
@@ -974,23 +1035,38 @@
   function validateForm() {
     let ok = true;
     const checks = [
-      { id: 'awardType', check: () => !!document.querySelector('input[name="awardType"]:checked') },
+      { id: 'awardType',    check: () => !!document.querySelector('input[name="awardType"]:checked') },
       { id: 'attendingEvent', check: () => !!document.getElementById('attendingEvent').value },
-      { id: 'eventCity', check: () => !!document.getElementById('eventCity').value },
-      { id: 'awardDate', check: () => !!document.getElementById('awardDate').value },
-      { id: 'studioName', check: () => !!document.getElementById('studioName').value.trim() },
-      { id: 'dancerName', check: () => !!document.getElementById('dancerName').value.trim() },
-      { id: 'dancerAge',  check: () => { const v = parseInt(document.getElementById('dancerAge').value); return !isNaN(v) && v >= 4 && v <= 25; } },
+      { id: 'eventCity',    check: () => !!document.getElementById('eventCity').value },
+      { id: 'awardDate',    check: () => !!document.getElementById('awardDate').value },
+      { id: 'studioName',   check: () => !!document.getElementById('studioName').value.trim() },
+      { id: 'dancerName',   check: () => !!document.getElementById('dancerName').value.trim() },
+      { id: 'dancerAge',    check: () => { const v = parseInt(document.getElementById('dancerAge').value); return !isNaN(v) && v >= 4 && v <= 25; } },
       { id: 'contactPhone', check: () => document.getElementById('contactPhone').value.trim().length >= 7 },
       { id: 'contactEmail', check: () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('contactEmail').value.trim()) },
-      { id: 'certPhoto', check: () => fileInput.files && fileInput.files.length > 0 },
-      { id: 'consentContact', check: () => document.getElementById('consentContact').checked },
+      { id: 'consentContact',    check: () => document.getElementById('consentContact').checked },
       { id: 'consentCommitment', check: () => document.getElementById('consentCommitment').checked },
     ];
     checks.forEach(c => {
       if (!c.check()) { showFieldError(c.id); ok = false; }
       else clearFieldError(c.id);
     });
+
+    // ── Photo count must match award count ──
+    const awardsCount = document.querySelectorAll('input[name="awardType"]:checked').length;
+    const filesCount  = fileInput.files ? fileInput.files.length : 0;
+    if (awardsCount > 0) {
+      if (filesCount === 0) {
+        showFieldError('certPhoto', 'Please upload ' + awardsCount + ' certificate photo' + (awardsCount > 1 ? 's' : '') + ' — one for each award selected.');
+        ok = false;
+      } else if (filesCount !== awardsCount) {
+        showFieldError('certPhoto', 'You selected ' + awardsCount + ' award' + (awardsCount > 1 ? 's' : '') + ' — please upload exactly ' + awardsCount + ' certificate photo' + (awardsCount > 1 ? 's' : '') + ' (currently ' + filesCount + ' uploaded).');
+        ok = false;
+      } else {
+        clearFieldError('certPhoto');
+      }
+    }
+
     return ok;
   }
 
@@ -1013,35 +1089,39 @@
     const dancerAge   = document.getElementById('dancerAge').value.trim();
     const contactPhone = document.getElementById('contactPhone').value.trim();
     const contactEmail = document.getElementById('contactEmail').value.trim();
-    const photoFile   = fileInput.files[0];
+    const photoFiles  = [...fileInput.files];
 
     submitBtn.disabled = true;
     submitBtn.classList.add('loading');
     statusMsg.className = 'status-msg';
 
     try {
-      // ── STEP 1: Send file + data to Google Apps Script ──
-      const reader = new FileReader();
-      const fileDataUrl = await new Promise((res, rej) => {
-        reader.onload = () => res(reader.result);
-        reader.onerror = rej;
-        reader.readAsDataURL(photoFile);
-      });
+      // ── STEP 1: Read all files + send to Google Apps Script ──
+      const filesData = await Promise.all(photoFiles.map(function(file) {
+        return new Promise(function(res, rej) {
+          const r = new FileReader();
+          r.onload = function() { res({ fileName: file.name, fileData: r.result }); };
+          r.onerror = rej;
+          r.readAsDataURL(file);
+        });
+      }));
 
       const payload = {
         awardType, attendingEvent, eventCity, awardDate, studioName,
         dancerName, dancerAge, contactPhone, contactEmail,
-        fileName: photoFile.name,
-        fileData: fileDataUrl,
+        files: filesData,
         submittedAt: new Date().toISOString()
       };
 
-      await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify(payload)
-      });
-      // no-cors response is opaque — request is sent, we just can't read the response
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+      } catch(corsErr) {
+        // CORS restriction on response is expected — request was still received by Apps Script
+        console.log('Apps Script fetch note:', corsErr);
+      }
 
       // ── STEP 2: Send thank-you email via EmailJS ──
       const awardTypes = awardType.split(', ');
