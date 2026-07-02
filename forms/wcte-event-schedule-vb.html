@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virginia Beach 2026 National Championships &mdash; Event Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#160a2e;
+    --bg-mid:#2a0f4f;
+    --pink:#e91e8c;
+    --pink-soft:#ff5fa8;
+    --purple:#7b2ff7;
+    --card:rgba(255,255,255,0.055);
+    --card-border:rgba(255,255,255,0.12);
+    --text:#f3edfb;
+    --text-dim:#c4b6e0;
+    --text-faint:#8c7bab;
+    --amber:#ffb020;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(circle at 15% 0%, rgba(233,30,140,0.25), transparent 45%),
+      radial-gradient(circle at 85% 100%, rgba(123,47,247,0.22), transparent 50%),
+      var(--bg-deep);
+    min-height:100vh;
+  }
+  h1,h2,h3,.brand{font-family:'Montserrat',sans-serif;}
+
+  /* ---------- Topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(16px);
+    background:rgba(22,10,46,0.86);
+    border-bottom:1px solid var(--card-border);
+    padding:12px 20px;
+  }
+  .topbar-inner{max-width:1100px;margin:0 auto;}
+  .topbar-row1{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+  .brand{display:flex;flex-direction:column;}
+  .brand-title{font-size:1.2em;font-weight:800;letter-spacing:0.3px;
+    background:linear-gradient(90deg,#fff,var(--pink-soft));
+    -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .brand-sub{font-size:0.7em;color:var(--text-faint);letter-spacing:1.4px;text-transform:uppercase;margin-top:2px;}
+  .sync-cluster{display:flex;align-items:center;gap:8px;font-size:0.78em;color:var(--text-dim);}
+  .live-badge{
+    display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:14px;
+    background:rgba(255,255,255,0.06);border:1px solid var(--card-border);cursor:default;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;flex:0 0 auto;}
+  .dot.off{background:#f87171;box-shadow:0 0 6px #f87171;}
+  .btn{
+    background:linear-gradient(135deg,var(--pink),var(--purple));
+    border:none;color:#fff;padding:8px 16px;border-radius:20px;
+    font-size:0.8em;font-weight:600;cursor:pointer;letter-spacing:0.3px;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(233,30,140,0.4);}
+  .btn-ghost{
+    background:rgba(255,255,255,0.08); border:1px solid var(--card-border); color:var(--text);
+    padding:8px 12px;border-radius:20px;font-size:0.8em;cursor:pointer;
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,0.14);}
+
+  .search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .search-box{
+    flex:1;min-width:220px;position:relative;
+  }
+  .search-box input{
+    width:100%;padding:11px 14px 11px 36px;border-radius:14px;
+    border:1px solid var(--card-border); background:rgba(255,255,255,0.06);
+    color:var(--text);font-size:0.92em;outline:none;
+  }
+  .search-box input::placeholder{color:var(--text-faint);}
+  .search-box input:focus{border-color:var(--pink);}
+  .search-box svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.6;}
+  .clear-btn{
+    position:absolute;right:10px;top:50%;transform:translateY(-50%);
+    background:none;border:none;color:var(--text-faint);cursor:pointer;font-size:1.1em;display:none;
+  }
+
+  select.day-jump{
+    display:none;
+    padding:11px 14px;border-radius:14px;border:1px solid var(--card-border);
+    background:rgba(255,255,255,0.06);color:var(--text);font-size:0.85em;outline:none;
+  }
+
+  .day-pills{display:flex;gap:8px;overflow-x:auto;margin-top:12px;padding-bottom:2px;}
+  .day-pill{
+    flex:0 0 auto;padding:9px 15px;border-radius:16px;
+    background:rgba(255,255,255,0.06);border:1px solid var(--card-border);
+    color:var(--text-dim);font-size:0.8em;font-weight:600;cursor:pointer;white-space:nowrap;
+    transition:all .15s;
+  }
+  .day-pill:hover{background:rgba(255,255,255,0.12);}
+  .day-pill.active{background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;border-color:transparent;}
+
+  @media (max-width:680px){
+    .day-pills{display:none;}
+    select.day-jump{display:block;flex:1;min-width:150px;}
+  }
+
+  /* ---------- Content ---------- */
+  .wrap{max-width:1100px;margin:0 auto;padding:22px 20px 0;}
+
+  .notice-card{
+    background:linear-gradient(135deg, rgba(255,176,32,0.14), rgba(255,176,32,0.05));
+    border:1px solid rgba(255,176,32,0.35);
+    border-radius:16px;padding:16px 18px;margin-bottom:22px;
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .notice-card .icon{font-size:1.3em;line-height:1;}
+  .notice-card .body b{color:var(--amber);}
+  .notice-card .body{font-size:0.88em;color:var(--text-dim);line-height:1.5;}
+
+  .day-section{margin-bottom:34px;scroll-margin-top:180px;}
+  .day-header{
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    padding:16px 20px;border-radius:18px;margin-bottom:14px;
+    background:linear-gradient(120deg, rgba(233,30,140,0.20), rgba(123,47,247,0.20));
+    border:1px solid var(--card-border);
+  }
+  .day-date-block{display:flex;flex-direction:column;min-width:90px;}
+  .day-weekday{font-size:0.72em;text-transform:uppercase;letter-spacing:1.5px;color:var(--pink-soft);font-weight:700;}
+  .day-date{font-size:1.5em;font-weight:800;}
+  .day-theme{
+    font-size:0.85em;font-weight:600;color:#fff;letter-spacing:0.4px;
+    padding:6px 14px;border-radius:12px;background:rgba(255,255,255,0.1);
+  }
+  .day-count{margin-left:auto;font-size:0.75em;color:var(--text-faint);}
+  .day-blurb{
+    flex-basis:100%;font-size:0.85em;color:var(--text-dim);line-height:1.55;
+    margin-top:2px;max-width:760px;
+  }
+
+  .event-list{display:flex;flex-direction:column;gap:8px;}
+  .event-card{
+    display:grid;grid-template-columns:130px 1fr auto;gap:14px;align-items:center;
+    background:var(--card); border:1px solid var(--card-border);
+    border-radius:14px;padding:12px 16px;
+    transition:background .15s, transform .15s;
+  }
+  .event-card:hover{background:rgba(255,255,255,0.09);}
+  .event-card.dim{opacity:0.25;}
+  .event-time{font-size:0.8em;font-weight:700;color:var(--pink-soft);letter-spacing:0.2px;}
+  .event-main .event-title{font-size:0.95em;font-weight:700;color:#fff;letter-spacing:0.2px;}
+  .event-main .event-detail{font-size:0.82em;color:var(--text-dim);margin-top:2px;}
+  .event-loc{
+    font-size:0.72em;color:var(--text-faint);text-align:right;max-width:210px;
+    display:flex;align-items:center;gap:5px;justify-content:flex-end;
+  }
+  mark{background:var(--pink);color:#fff;border-radius:3px;padding:0 2px;}
+
+  .empty-state{text-align:center;padding:50px 20px;color:var(--text-faint);}
+  .empty-state .big{font-size:2em;margin-bottom:8px;}
+
+  @media (max-width:640px){
+    .event-card{grid-template-columns:1fr;gap:4px;}
+    .event-loc{text-align:left;justify-content:flex-start;}
+    .day-count{margin-left:0;width:100%;}
+  }
+
+  /* ---------- Print ---------- */
+  .print-only{display:none;}
+  @media print{
+    body{background:#fff !important;color:#111 !important;padding:0;}
+    .topbar, .notice-card, .empty-state{display:none !important;}
+    .print-only{display:block;}
+    .print-header{
+      display:flex;align-items:center;gap:16px;border-bottom:3px solid #111;
+      padding-bottom:12px;margin-bottom:16px;
+    }
+    .print-header img{height:46px;}
+    .print-header .ph-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.3em;color:#111;}
+    .print-header .ph-sub{font-size:0.8em;color:#555;}
+    .print-meta{font-size:0.75em;color:#555;margin-bottom:14px;}
+    .day-section{break-inside:avoid;margin-bottom:18px;}
+    .day-header{background:#eee !important;border:1px solid #999 !important;color:#111 !important;}
+    .day-weekday,.day-theme{color:#111 !important;background:#ddd !important;}
+    .day-blurb{color:#333 !important;}
+    .event-card{
+      background:#fff !important;border:1px solid #999 !important;color:#111 !important;
+      break-inside:avoid;
+    }
+    .event-title{color:#111 !important;}
+    .event-detail,.event-loc,.event-time{color:#333 !important;}
+    a{color:#111 !important;text-decoration:none;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-row1">
+        <div class="brand">
+          <div class="brand-title">Virginia Beach 2026 National Championships</div>
+          <div class="brand-sub">Event Schedule &middot; WCTE Dance</div>
+        </div>
+        <div class="sync-cluster">
+          <span class="live-badge" id="liveBadge" title="Loading schedule&hellip;">
+            <span class="dot" id="syncDot"></span>
+            <span id="syncText">Loading&hellip;</span>
+          </span>
+          <button class="btn-ghost" onclick="loadSchedule(true)">Refresh</button>
+          <button class="btn" onclick="window.print()">Print</button>
+        </div>
+      </div>
+      <div class="search-row">
+        <div class="search-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Search sessions, ages, locations&hellip;" oninput="onSearch()">
+          <button class="clear-btn" id="clearBtn" onclick="clearSearch()">&times;</button>
+        </div>
+        <select class="day-jump" id="dayJump" onchange="jumpToDay(this.value)">
+          <option value="">Jump to day&hellip;</option>
+        </select>
+      </div>
+      <div class="day-pills" id="dayPills"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="print-only print-header">
+      <img id="printLogo" src="" alt="WCTE">
+      <div>
+        <div class="ph-title">Virginia Beach 2026 National Championships</div>
+        <div class="ph-sub">Event Schedule</div>
+      </div>
+    </div>
+    <div class="print-only print-meta" id="printMeta"></div>
+
+    <div id="noticesContainer"></div>
+    <div id="scheduleContainer"></div>
+  </div>
+
+<script>
+const SHEET_ID = '1UHZKyQAsA1X5ZFCmJxWy4zyI6HtdppsZ';
+const GID = '1155320959';
+const CACHE_KEY = 'wcte_event_schedule_vb_cache_v1';
+const YEAR = 2026;
+
+// If the sheet repeats the event's own name as a stray banner row at the top
+// of each day's block (the way the Mystic sheet does), it would otherwise get
+// picked up as a day theme below. Adjust this string to match whatever banner
+// text (if any) appears in the Virginia Beach sheet, or leave it as-is if the
+// sheet doesn't have that pattern -- it simply won't match anything.
+const EVENT_TITLE_FILTER = 'VIRGINIA BEACH';
+
+// ---- Fallback seed data (used only if live sync fails AND no cache exists yet) ----
+// No historical schedule to seed from yet for this event, so this starts
+// empty -- the page will simply wait on the live sheet the first time.
+const SEED_DAYS = [];
+const SEED_NOTICES = [];
+
+// Short public-facing blurbs for each themed day, keyed by the same 'D-Mon' date key
+// (e.g. '5-Mar'). Feel free to tweak the copy below.
+const DAY_BLURBS = {
+  '6-Jul': 'Kick things off with sunshine and island energy as dancers take the stage for Solo and Duo/Trio Competition.',
+  '7-Jul': 'A day of dreams and Disney magic, with high-energy performances and unforgettable moments on stage.',
+  '8-Jul': 'Show your studio pride as teams take the stage \u2014 decorate your spirit table and celebrate your dance family.',
+  '9-Jul': 'WCTE\u2019s most prestigious event \u2014 the Opening Number, Title Showcase Presentations, and National Champion Awards celebrate the very best of the best.',
+};
+
+let days = [];
+let notices = [];
+let isLive = false;
+let lastSyncedAt = null;
+
+// ---------------- Data loading ----------------
+function gvizUrl(){
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}&t=${Date.now()}`;
+}
+
+function cell(row, idx){
+  const c = row.c && row.c[idx];
+  if(!c) return '';
+  const val = (c.f !== undefined && c.f !== null && c.f !== '') ? c.f : c.v;
+  if(val === null || val === undefined) return '';
+  const s = String(val).trim();
+  const low = s.toLowerCase();
+  return (low === 'null' || low === 'undefined') ? '' : s;
+}
+
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// Handles plain "5-Mar" text, raw gviz date codes like "Date(2026,2,5)"
+// (which is what a badly-formatted or auto-typed date cell serializes as),
+// and any other parseable date string - always reduces to a clean 'D-Mon' key.
+function resolveDateKey(raw){
+  if(!raw) return null;
+  let m = /^(\d{1,2})-([A-Za-z]{3})/.exec(raw);
+  if(m){
+    const mon = MONTH_NAMES.find(x => x.toLowerCase() === m[2].slice(0,3).toLowerCase());
+    if(mon) return `${parseInt(m[1],10)}-${mon}`;
+  }
+  m = /^Date\((\d+),(\d+),(\d+)/.exec(raw);
+  if(m) return `${parseInt(m[3],10)}-${MONTH_NAMES[parseInt(m[2],10)]}`;
+  const d = new Date(raw);
+  if(!isNaN(d.getTime())) return `${d.getDate()}-${MONTH_NAMES[d.getMonth()]}`;
+  return null;
+}
+
+// Column headers are matched by keyword rather than a fixed position, since
+// different sheets (or a re-ordered/re-inserted column) can shift where
+// Date/Time/Description/Location actually land.
+const COLUMN_DEFS = [
+  { key: 'date',     match: ['date'] },
+  { key: 'time',     match: ['time'] },
+  { key: 'title',    match: ['description'] },
+  { key: 'detail',   match: ['description'] },
+  { key: 'loc',      match: ['location'] },
+];
+
+function mapColumns(rawHeaders){
+  const idx = {};
+  const used = new Set();
+  COLUMN_DEFS.forEach(def => {
+    const i = rawHeaders.findIndex((h, n) => !used.has(n) && def.match.some(m => h.toLowerCase().includes(m)));
+    if(i !== -1){ idx[def.key] = i; used.add(i); }
+  });
+  return idx;
+}
+
+function parseSheetJson(json){
+  const rows = (json.table && json.table.rows) || [];
+  const rawHeaders = (json.table.cols || []).map(c => (c.label || '').trim());
+  const colIdx = mapColumns(rawHeaders);
+  const candidates = [];
+  const noticeList = [];
+  const dayThemes = {};
+
+  const HEADER_WORDS = new Set(['DATE','TIME','DESCRIPTION','LOCATION']);
+  function isHeaderRow(a,b,c,d,e){
+    return HEADER_WORDS.has(a.toUpperCase()) || HEADER_WORDS.has(b.toUpperCase()) ||
+           HEADER_WORDS.has(c.toUpperCase()) || HEADER_WORDS.has(d.toUpperCase()) ||
+           HEADER_WORDS.has(e.toUpperCase());
+  }
+
+  rows.forEach(row => {
+    const date = colIdx.date  !== undefined ? cell(row, colIdx.date)  : '';
+    const time = colIdx.time  !== undefined ? cell(row, colIdx.time)  : '';
+    const d1   = colIdx.title !== undefined ? cell(row, colIdx.title) : '';
+    const d2   = colIdx.detail!== undefined ? cell(row, colIdx.detail): '';
+    const loc  = colIdx.loc   !== undefined ? cell(row, colIdx.loc)   : '';
+
+    if(!date && !time && !d1 && !d2 && !loc) return; // blank row
+    if(isHeaderRow(date,time,d1,d2,loc)) return; // repeated column-label row (any cell still carrying the label)
+    if(EVENT_TITLE_FILTER && d1.toUpperCase().includes(EVENT_TITLE_FILTER)) return; // stray event-name banner row
+
+    const dateKey = date ? resolveDateKey(date) : null;
+
+    // Theme/banner row: carries a date but no time and no location, with both
+    // description columns repeating the same short label -- the sheet's way
+    // of stamping a day's theme rather than a real schedule item.
+    const looksLikeTheme = dateKey && !time && !loc && d1;
+    if(looksLikeTheme){
+      if(!dayThemes[dateKey]) dayThemes[dateKey] = d1;
+      return;
+    }
+
+    if(!date && !time && d1){
+      // theme row with no date at all (e.g. a banner inserted above column headers)
+      dayThemes.__pending = d1;
+      return;
+    }
+
+    if(dateKey){
+      candidates.push({ dateKey, time, title: d1, detail: d2, loc });
+    } else if(date || d1){
+      // doesn't resolve to a real date - surface as a notice rather than guessing
+      noticeList.push({ title: d1 || date, detail: [d2, loc].filter(Boolean).join(' \u00b7 ') });
+    }
+  });
+
+  // Guard against stray/mistyped dates (e.g. a typo that resolves to the wrong
+  // month) hijacking their own phantom day: only the dominant month becomes days.
+  const monthCounts = {};
+  candidates.forEach(c => {
+    const mon = c.dateKey.split('-')[1];
+    monthCounts[mon] = (monthCounts[mon] || 0) + 1;
+  });
+  let dominantMonth = null, best = 0;
+  Object.keys(monthCounts).forEach(m => { if(monthCounts[m] > best){ best = monthCounts[m]; dominantMonth = m; } });
+
+  const byDate = {};
+  const order = [];
+  candidates.forEach(c => {
+    const mon = c.dateKey.split('-')[1];
+    if(dominantMonth && mon !== dominantMonth){
+      noticeList.push({ title: c.title, detail: [c.detail, c.loc].filter(Boolean).join(' \u00b7 ') });
+      return;
+    }
+    if(!byDate[c.dateKey]){
+      byDate[c.dateKey] = { date: c.dateKey, theme: dayThemes[c.dateKey] || '', events: [] };
+      order.push(c.dateKey);
+    }
+    byDate[c.dateKey].events.push({ time: c.time, title: c.title, detail: c.detail, loc: c.loc });
+  });
+
+  order.sort((a,b) => new Date(`${a} ${YEAR}`) - new Date(`${b} ${YEAR}`));
+
+  const parsedDays = order.map(k => byDate[k]).filter(d => d.events.length);
+  return { days: parsedDays, notices: noticeList };
+}
+
+function saveCache(){
+  try{
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ days, notices, savedAt: new Date().toISOString() }));
+  }catch(e){}
+}
+function loadCache(){
+  try{
+    const raw = localStorage.getItem(CACHE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+
+function setLive(v){
+  isLive = v;
+  document.getElementById('syncDot').classList.toggle('off', !v);
+}
+
+function timeAgo(d){
+  const s = Math.floor((new Date() - d) / 1000);
+  if(s < 60) return 'just now';
+  const m = Math.floor(s/60);
+  if(m < 60) return `${m} min ago`;
+  const h = Math.floor(m/60);
+  return `${h} hr ago`;
+}
+
+function setBadge(shortText, fullText){
+  document.getElementById('syncText').textContent = shortText;
+  document.getElementById('liveBadge').title = fullText || shortText;
+}
+
+function updateSyncText(){
+  if(isLive) setBadge('Live', `Live \u00b7 synced ${timeAgo(lastSyncedAt)}`);
+}
+setInterval(() => { if(isLive) updateSyncText(); }, 30000);
+
+async function loadSchedule(manual){
+  if(manual) setBadge('Refreshing\u2026', 'Refreshing\u2026');
+
+  const script = document.createElement('script');
+  const cbName = 'wcteScheduleCb_' + Date.now();
+  let settled = false;
+
+  const timeout = setTimeout(() => {
+    if(!settled){ settled = true; handleFailure(); cleanup(); }
+  }, 10000);
+
+  function cleanup(){
+    clearTimeout(timeout);
+    delete window[cbName];
+    script.remove();
+  }
+
+  window[cbName] = function(json){
+    if(settled) return;
+    settled = true;
+    try{
+      const parsed = parseSheetJson(json);
+      if(!parsed.days.length) throw new Error('No rows parsed');
+      days = parsed.days;
+      notices = parsed.notices;
+      setLive(true);
+      lastSyncedAt = new Date();
+      saveCache();
+      renderAll();
+      updateSyncText();
+    }catch(err){
+      console.error('Parse failed:', err);
+      handleFailure();
+    }
+    cleanup();
+  };
+
+  script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json;responseHandler:${cbName}&gid=${GID}&t=${Date.now()}`;
+  script.onerror = () => { if(!settled){ settled = true; handleFailure(); cleanup(); } };
+  document.body.appendChild(script);
+}
+
+function handleFailure(){
+  setLive(false);
+  const cached = loadCache();
+  if(cached && cached.days && cached.days.length){
+    days = cached.days;
+    notices = cached.notices || [];
+    lastSyncedAt = new Date(cached.savedAt);
+    renderAll();
+    setBadge('Offline', `Live sync unavailable \u00b7 showing schedule saved ${timeAgo(lastSyncedAt)}`);
+  } else if(!days.length){
+    days = SEED_DAYS;
+    notices = SEED_NOTICES;
+    renderAll();
+    setBadge('Offline', 'Showing saved schedule \u2014 live sync unavailable');
+  } else {
+    setBadge('Offline', 'Live sync unavailable');
+  }
+}
+
+// ---------------- Rendering ----------------
+function escapeHtml(s){
+  return String(s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function weekdayLabel(dateStr){
+  const d = new Date(`${dateStr} ${YEAR}`);
+  return d.toLocaleDateString('en-US', { weekday:'long' });
+}
+
+function highlight(text, q){
+  const safe = escapeHtml(text);
+  if(!q) return safe;
+  try{
+    const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'ig');
+    return safe.replace(re, '<mark>$1</mark>');
+  }catch(e){ return safe; }
+}
+
+function renderAll(){
+  renderPills();
+  renderDayJump();
+  renderNotices();
+  renderSchedule();
+  document.getElementById('printMeta').textContent =
+    `Generated ${new Date().toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' })}`;
+  document.getElementById('printLogo').src = 'data:image/jpeg;base64,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';
+}
+
+function renderPills(){
+  const wrap = document.getElementById('dayPills');
+  wrap.innerHTML = days.map((d,i) => {
+    const wd = weekdayLabel(d.date).slice(0,3);
+    return `<button class="day-pill${i===0?' active':''}" data-day="${d.date}" onclick="jumpToDay('${d.date}', this)">${wd} ${d.date}</button>`;
+  }).join('');
+}
+
+function renderDayJump(){
+  const sel = document.getElementById('dayJump');
+  sel.innerHTML = '<option value="">Jump to day\u2026</option>' +
+    days.map(d => `<option value="${d.date}">${weekdayLabel(d.date)}, ${d.date} &mdash; ${escapeHtml(d.theme || '')}</option>`).join('');
+}
+
+function jumpToDay(dateKey, pillEl){
+  if(!dateKey) return;
+  const el = document.getElementById('day-' + dateKey);
+  if(el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+  document.querySelectorAll('.day-pill').forEach(p => p.classList.toggle('active', p.dataset.day === dateKey));
+  document.getElementById('dayJump').value = '';
+}
+
+function renderNotices(){
+  const wrap = document.getElementById('noticesContainer');
+  if(!notices.length){ wrap.innerHTML = ''; return; }
+  wrap.innerHTML = notices.map(n => `
+    <div class="notice-card">
+      <div class="icon">&#128226;</div>
+      <div class="body"><b>${escapeHtml(n.title)}</b><br>${escapeHtml(n.detail)}</div>
+    </div>`).join('');
+}
+
+function renderSchedule(){
+  const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+  const container = document.getElementById('scheduleContainer');
+  let anyMatch = false;
+
+  const html = days.map(day => {
+    const rows = day.events.map(ev => {
+      const hay = `${ev.time} ${ev.title} ${ev.detail} ${ev.loc}`.toLowerCase();
+      const match = !q || hay.includes(q);
+      if(match) anyMatch = true;
+      return `
+        <div class="event-card${q && !match ? ' dim' : ''}" ${q && !match ? 'style="display:none"' : ''}>
+          <div class="event-time">${ev.time ? highlight(ev.time, q) : ''}</div>
+          <div class="event-main">
+            <div class="event-title">${highlight(ev.title, q)}</div>
+            ${ev.detail ? `<div class="event-detail">${highlight(ev.detail, q)}</div>` : ''}
+          </div>
+          ${ev.loc ? `<div class="event-loc">&#128205; ${highlight(ev.loc, q)}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    const dayHasMatch = q ? day.events.some(ev => `${ev.time} ${ev.title} ${ev.detail} ${ev.loc}`.toLowerCase().includes(q)) : true;
+
+    return `
+      <div class="day-section" id="day-${day.date}" ${q && !dayHasMatch ? 'style="display:none"' : ''}>
+        <div class="day-header">
+          <div class="day-date-block">
+            <div class="day-weekday">${weekdayLabel(day.date)}</div>
+            <div class="day-date">${day.date}</div>
+          </div>
+          ${day.theme ? `<div class="day-theme">${escapeHtml(day.theme)}</div>` : ''}
+          <div class="day-count">${day.events.length} item${day.events.length===1?'':'s'}</div>
+          ${DAY_BLURBS[day.date] ? `<div class="day-blurb">${escapeHtml(DAY_BLURBS[day.date])}</div>` : ''}
+        </div>
+        <div class="event-list">${rows}</div>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = html;
+
+  if(q && !anyMatch){
+    container.innerHTML += `
+      <div class="empty-state">
+        <div class="big">&#128269;</div>
+        <div>No sessions match "${escapeHtml(q)}"</div>
+      </div>`;
+  }
+}
+
+function onSearch(){
+  document.getElementById('clearBtn').style.display = document.getElementById('searchInput').value ? 'block' : 'none';
+  renderSchedule();
+}
+function clearSearch(){
+  document.getElementById('searchInput').value = '';
+  onSearch();
+}
+
+// ---------------- Init ----------------
+(function init(){
+  const cached = loadCache();
+  if(cached && cached.days && cached.days.length){
+    days = cached.days;
+    notices = cached.notices || [];
+    lastSyncedAt = new Date(cached.savedAt);
+    renderAll();
+    setBadge('Syncing\u2026', `Showing schedule saved ${timeAgo(lastSyncedAt)} \u2014 syncing\u2026`);
+  } else {
+    days = SEED_DAYS;
+    notices = SEED_NOTICES;
+    renderAll();
+  }
+  loadSchedule(false);
+})();
+</script>
+</body>
+</html>
