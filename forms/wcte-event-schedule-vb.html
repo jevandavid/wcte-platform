@@ -118,6 +118,11 @@
   .notice-card .icon{font-size:1.3em;line-height:1;}
   .notice-card .body b{color:var(--amber);}
   .notice-card .body{font-size:0.88em;color:var(--text-dim);line-height:1.5;}
+  .notice-card.announcement{
+    background:linear-gradient(135deg, rgba(233,30,140,0.18), rgba(123,47,247,0.10));
+    border-color:rgba(233,30,140,0.45);
+  }
+  .notice-card.announcement .body b{color:var(--pink-soft);}
 
   .day-section{margin-bottom:34px;scroll-margin-top:180px;}
   .day-header{
@@ -235,6 +240,11 @@
       </div>
     </div>
     <div class="print-only print-meta" id="printMeta"></div>
+
+    <div class="notice-card announcement">
+      <div class="icon">🏆</div>
+      <div class="body"><b>Elite Finalists Schedule:</b> The confirmed Elite Finalists schedule will be emailed to studios &amp; posted on studio accounts following the Awards Ceremony.</div>
+    </div>
 
     <div id="noticesContainer"></div>
     <div id="scheduleContainer"></div>
