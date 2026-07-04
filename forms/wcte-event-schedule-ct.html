@@ -121,6 +121,11 @@
   .notice-card .icon{font-size:1.3em;line-height:1;}
   .notice-card .body b{color:var(--amber);}
   .notice-card .body{font-size:0.88em;color:var(--text-dim);line-height:1.5;}
+  .notice-card.announcement{
+    background:linear-gradient(135deg, rgba(233,30,140,0.18), rgba(123,47,247,0.10));
+    border-color:rgba(233,30,140,0.45);
+  }
+  .notice-card.announcement .body b{color:var(--pink-soft);}
 
   .day-section{margin-bottom:34px;scroll-margin-top:180px;}
   .day-header{
@@ -239,6 +244,11 @@
     </div>
     <div class="print-only print-meta" id="printMeta"></div>
 
+    <div class="notice-card announcement">
+      <div class="icon">🏆</div>
+      <div class="body"><b>Elite Finalists Schedule:</b> The confirmed Elite Finalists schedule will be emailed to studios &amp; posted on studio accounts following the Awards Ceremony.</div>
+    </div>
+
     <div id="noticesContainer"></div>
     <div id="scheduleContainer"></div>
   </div>
@@ -314,9 +324,7 @@ const SEED_DAYS = [
     {time:'8:30PM/ 9:00PM (TENTATIVE)', title:'AWARDS CEREMONY', detail:'TITLE CHAMPIONS, NATIONAL DIVISION CHAMPIONS, NATIONAL CLASS ACT & SPORTSMANSHIP & TOP STUDIO HONORED', loc:'MAIN STAGE'}
   ]}
 ];
-const SEED_NOTICES = [
-  { title:'Elite Finalists Schedule', detail:'The confirmed Elite Finalists schedule will be emailed to studios & posted on studio accounts following the Awards Ceremony.' }
-];
+const SEED_NOTICES = [];
 
 // Short public-facing blurbs for each themed day, keyed by the same 'D-Mon' date key.
 const DAY_BLURBS = {
@@ -588,8 +596,12 @@ function jumpToDay(dateKey, pillEl){
 
 function renderNotices(){
   const wrap = document.getElementById('noticesContainer');
-  if(!notices.length){ wrap.innerHTML = ''; return; }
-  wrap.innerHTML = notices.map(n => `
+  // The static "Elite Finalists Schedule" banner above already covers this
+  // announcement permanently -- drop any dynamically-detected notice that's
+  // just the sheet re-stating the same thing, so it doesn't show twice.
+  const filtered = notices.filter(n => !/elite finalists/i.test(n.title) && !/elite finalists/i.test(n.detail));
+  if(!filtered.length){ wrap.innerHTML = ''; return; }
+  wrap.innerHTML = filtered.map(n => `
     <div class="notice-card">
       <div class="icon">&#128226;</div>
       <div class="body"><b>${escapeHtml(n.title)}</b><br>${escapeHtml(n.detail)}</div>
