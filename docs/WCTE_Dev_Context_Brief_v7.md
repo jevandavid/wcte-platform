@@ -286,13 +286,12 @@ WCTE Award Photos 2026/  ← DRIVE_FOLDER_ID
 - [x] Remove "View Nationals Info" button from email template
 - [x] Remove all references to personalized communications/schedules
 - [x] Push updated form to GitHub Pages
-- [ ] **PENDING:** Paste updated HTML into EmailJS template `template_8739osi`
+- [x] Paste updated HTML into EmailJS template `template_8739osi` ✅
 
 ---
 
 ## 12. Remaining Next Steps
 
-- [ ] **Paste updated email template** into EmailJS (`template_8739osi`) — file: `email-templates/wcte_emailjs_award_thankyou_template.html`
 - [ ] **Module 5** — Airtable integration (replace CSV paste in sender app)
 - [ ] **Module 6** — Post-event feedback automation (Tally + trigger)
 - [ ] **Module 7** — Studio owner portal (Softr)
