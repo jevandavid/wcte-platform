@@ -645,10 +645,6 @@
   <div class="ty-icon">✦</div>
   <div class="ty-title">You're <span>In!</span></div>
   <p class="ty-sub" id="tyMessage">Thank you for redeeming your Ambition Scholarship! We can't wait to see you at your WCTE Ambition Workshop!</p>
-  <div class="ty-commitment" id="tyCommitment">
-    <div class="ty-commitment-title">⚡ Your Commitment</div>
-    <p id="tyCommitmentText"></p>
-  </div>
   <p class="ty-next">A confirmation email is on its way to you. Check your inbox (and spam folder just in case).<br>Questions? Contact us at <a href="mailto:info@wctedance.com" style="color:var(--pink-light)">info@wctedance.com</a></p>
 </div>
 
@@ -1182,9 +1178,8 @@
       });
 
       // ── SUCCESS: Show thank you screen ──
-      document.getElementById('tyCommitmentText').textContent = commitmentText.replace(/<[^>]*>/g, '');
       const tyMsg = document.getElementById('tyMessage');
-      tyMsg.textContent = dancerName + ', your award redemption has been received! We are thrilled to confirm your spot and look forward to seeing you at ' + attendingEvent + '. Check your inbox for your confirmation.';
+      tyMsg.textContent = dancerName + ', your Ambition Scholarship redemption has been received! We look forward to seeing you at ' + attendingEvent + '. Check your inbox for your confirmation.';
 
       document.getElementById('formOuter').style.display = 'none';
       document.getElementById('thankYouScreen').style.display = 'block';
