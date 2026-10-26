@@ -1,61 +1,118 @@
 {
   "event": {
     "name": "AMBITION One-Day Dance Workshop",
-    "venue": "DoubleTree by Hilton Westborough",
+    "venue": "DoubleTree by Hilton Hotel Boston–Westborough",
     "address": "5400 Computer Drive, Westborough, MA 01581",
     "city": "Westborough, MA",
     "dateLabel": "SUNDAY, NOV 1, 2026",
     "date": "2026-11-01",
     "timezone": "America/New_York",
-    "contact": "info@wctedance.com"
+    "contact": "info@wctedance.com",
+    "room": "Main Ballroom"
   },
   "rooms": [
-    { "id": "room1", "label": "ROOM 1", "note": "12yrs & Under" },
-    { "id": "room2", "label": "ROOM 2", "note": "13yrs & Over" }
+    {
+      "id": "room1",
+      "label": "ROOM 1",
+      "note": "12yrs & Under"
+    },
+    {
+      "id": "room2",
+      "label": "ROOM 2",
+      "note": "13yrs & Over"
+    }
   ],
   "blocks": [
     {
-      "start": "09:00", "end": "09:30", "type": "all",
+      "start": "09:00",
+      "end": "09:30",
+      "type": "all",
       "title": "REGISTRATION FOR WORKSHOP | STUDIO CHECK-IN",
       "detail": "(MAIN LOBBY AREA)"
     },
     {
-      "start": "09:35", "end": "09:55", "type": "all",
+      "start": "09:35",
+      "end": "09:55",
+      "type": "all",
       "title": "DOORS OPEN TO BALLROOMS | COMBINED WARM-UP (ROOM 2)",
       "detail": "(ALL LEVELS)"
     },
     {
-      "start": "10:00", "end": "11:00", "type": "classes",
-      "room1": { "style": "HIP HOP", "instructor": "ANTHONY" },
-      "room2": { "style": "JAZZ", "instructor": "RYAN" }
+      "start": "10:00",
+      "end": "11:00",
+      "type": "classes",
+      "room1": {
+        "style": "HIP HOP",
+        "instructor": "ANTHONY"
+      },
+      "room2": {
+        "style": "JAZZ",
+        "instructor": "RYAN"
+      }
     },
     {
-      "start": "11:00", "end": "12:00", "type": "classes",
-      "room1": { "style": "LYRICAL", "instructor": "HALEY" },
-      "room2": { "style": "CONTEMPORARY", "instructor": "CHERYL" }
+      "start": "11:00",
+      "end": "12:00",
+      "type": "classes",
+      "room1": {
+        "style": "LYRICAL",
+        "instructor": "HALEY"
+      },
+      "room2": {
+        "style": "CONTEMPORARY",
+        "instructor": "CHERYL"
+      }
     },
     {
-      "start": "12:00", "end": "13:00", "type": "classes",
-      "room1": { "style": "FUSION", "instructor": "LINDSEY" },
-      "room2": { "style": "HIP HOP", "instructor": "ANTHONY" }
+      "start": "12:00",
+      "end": "13:00",
+      "type": "classes",
+      "room1": {
+        "style": "FUSION",
+        "instructor": "LINDSEY"
+      },
+      "room2": {
+        "style": "HIP HOP",
+        "instructor": "ANTHONY"
+      }
     },
     {
-      "start": "13:00", "end": "13:30", "type": "break",
+      "start": "13:00",
+      "end": "13:30",
+      "type": "break",
       "title": "(30) MIN LUNCH BREAK",
       "detail": "Hydrate & Re-energize!"
     },
     {
-      "start": "13:30", "end": "14:30", "type": "classes",
-      "room1": { "style": "JAZZ", "instructor": "RYAN" },
-      "room2": { "style": "LYRICAL", "instructor": "HALEY" }
+      "start": "13:30",
+      "end": "14:30",
+      "type": "classes",
+      "room1": {
+        "style": "JAZZ",
+        "instructor": "RYAN"
+      },
+      "room2": {
+        "style": "LYRICAL",
+        "instructor": "HALEY"
+      }
     },
     {
-      "start": "14:30", "end": "15:30", "type": "classes",
-      "room1": { "style": "CONTEMPORARY", "instructor": "CHERYL" },
-      "room2": { "style": "FUSION", "instructor": "LINDSEY" }
+      "start": "14:30",
+      "end": "15:30",
+      "type": "classes",
+      "room1": {
+        "style": "CONTEMPORARY",
+        "instructor": "CHERYL"
+      },
+      "room2": {
+        "style": "FUSION",
+        "instructor": "LINDSEY"
+      }
     },
     {
-      "start": "15:40", "end": "16:15", "type": "all",
+      "start": "15:40",
+      "end": "16:15",
+      "type": "all",
       "title": "DANCER SHOWCASE | AWARD PRESENTATION | FACULTY Q&A",
       "detail": "(ALL LEVELS)"
     }
@@ -63,5 +120,49 @@
   "footnotes": [
     "* Faculty will honor dancer scholarships at the Showcase Awards Presentation",
     "*Dancers under the Age of 16 yrs. must have a Parent/ Legal Guardian present for the duration of the workshop should a Studio Director / Teacher and/or Studio Representative not be present for the duration of the workshop."
-  ]
+  ],
+  "letter": {
+    "title": "WELCOME TO AMBITION DANCE WORKSHOP!",
+    "intro": [
+      "We’re excited to welcome you to a day of learning, connection, and dance!",
+      "At AMBITION, our mission is to **EDUCATE, MOTIVATE, and INSPIRE.** We bring together different styles and perspectives in an intimate, uplifting environment where dancers can build confidence, explore their artistry, and celebrate their unique voices. Our passionate, caring faculty look forward to sharing the dance floor with you!"
+    ],
+    "sections": [
+      {
+        "label": "Registration & Check-In",
+        "paragraphs": [
+          "Check-in is in the main lobby area outside the ballrooms. One studio representative should collect the studio’s registration packet, including dancer numbers. Dancers must wear their assigned numbers to enter the workshop rooms and participate in classes.",
+          "Additional dancer registrations will be available on-site. Please visit the registration table for assistance."
+        ]
+      }
+    ],
+    "remindersLabel": "Friendly Reminders",
+    "reminders": [
+      {
+        "label": "Observers",
+        "text": "Wristbands are available for purchase on-site for $35 and must be worn while inside the dance rooms."
+      },
+      {
+        "label": "Lunch, snacks & water",
+        "text": "Please bring lunch for the scheduled 30-minute lunch break, along with snacks and water to enjoy between classes."
+      },
+      {
+        "label": "What to bring",
+        "text": "Please arrive prepared with appropriate dancewear and footwear for Jazz, Lyrical, Hip Hop, and Contemporary classes."
+      },
+      {
+        "label": "Bags & personal items",
+        "text": "For everyone’s safety, place belongings under chairs and along the perimeter of the dance rooms. Keep dance areas, walkways, and exits clear at all times."
+      },
+      {
+        "label": "Photography",
+        "text": "Photos are welcome between classes and during the teacher/dancer showcase. For dancer safety, flash photography is not permitted."
+      },
+      {
+        "label": "Personal belongings",
+        "text": "Please keep track of your belongings. The host hotel, facility, WCTE, Inc., and AMBITION Dance Workshop are not responsible for lost personal items or injuries."
+      }
+    ],
+    "closing": "Thank you for being part of the AMBITION experience. We can’t wait to dance with you!"
+  }
 }
