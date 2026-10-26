@@ -1,0 +1,67 @@
+{
+  "event": {
+    "name": "AMBITION One-Day Dance Workshop",
+    "venue": "DoubleTree by Hilton Westborough",
+    "address": "5400 Computer Drive, Westborough, MA 01581",
+    "city": "Westborough, MA",
+    "dateLabel": "SUNDAY, NOV 1, 2026",
+    "date": "2026-11-01",
+    "timezone": "America/New_York",
+    "contact": "info@wctedance.com"
+  },
+  "rooms": [
+    { "id": "room1", "label": "ROOM 1", "note": "12yrs & Under" },
+    { "id": "room2", "label": "ROOM 2", "note": "13yrs & Over" }
+  ],
+  "blocks": [
+    {
+      "start": "09:00", "end": "09:30", "type": "all",
+      "title": "REGISTRATION FOR WORKSHOP | STUDIO CHECK-IN",
+      "detail": "(MAIN LOBBY AREA)"
+    },
+    {
+      "start": "09:35", "end": "09:55", "type": "all",
+      "title": "DOORS OPEN TO BALLROOMS | COMBINED WARM-UP (ROOM 2)",
+      "detail": "(ALL LEVELS)"
+    },
+    {
+      "start": "10:00", "end": "11:00", "type": "classes",
+      "room1": { "style": "HIP HOP", "instructor": "ANTHONY" },
+      "room2": { "style": "JAZZ", "instructor": "RYAN" }
+    },
+    {
+      "start": "11:00", "end": "12:00", "type": "classes",
+      "room1": { "style": "LYRICAL", "instructor": "HALEY" },
+      "room2": { "style": "CONTEMPORARY", "instructor": "CHERYL" }
+    },
+    {
+      "start": "12:00", "end": "13:00", "type": "classes",
+      "room1": { "style": "FUSION", "instructor": "LINDSEY" },
+      "room2": { "style": "HIP HOP", "instructor": "ANTHONY" }
+    },
+    {
+      "start": "13:00", "end": "13:30", "type": "break",
+      "title": "(30) MIN LUNCH BREAK",
+      "detail": "Hydrate & Re-energize!"
+    },
+    {
+      "start": "13:30", "end": "14:30", "type": "classes",
+      "room1": { "style": "JAZZ", "instructor": "RYAN" },
+      "room2": { "style": "LYRICAL", "instructor": "HALEY" }
+    },
+    {
+      "start": "14:30", "end": "15:30", "type": "classes",
+      "room1": { "style": "CONTEMPORARY", "instructor": "CHERYL" },
+      "room2": { "style": "FUSION", "instructor": "LINDSEY" }
+    },
+    {
+      "start": "15:40", "end": "16:15", "type": "all",
+      "title": "DANCER SHOWCASE | AWARD PRESENTATION | FACULTY Q&A",
+      "detail": "(ALL LEVELS)"
+    }
+  ],
+  "footnotes": [
+    "* Faculty will honor dancer scholarships at the Showcase Awards Presentation",
+    "*Dancers under the Age of 16 yrs. must have a Parent/ Legal Guardian present for the duration of the workshop should a Studio Director / Teacher and/or Studio Representative not be present for the duration of the workshop."
+  ]
+}
