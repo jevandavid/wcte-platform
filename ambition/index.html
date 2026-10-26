@@ -1,1 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMBITION Westborough Schedule</title>
+<meta name="description" content="Live schedule for the AMBITION One-Day Dance Workshop at the DoubleTree by Hilton Westborough, Sunday, Nov 1, 2026.">
+<meta name="theme-color" content="#b01c1c">
+<style>
+  :root {
+    --red: #b01c1c;
+    --red-dark: #7f1212;
+    --ink: #1b1b1b;
+    --muted: #5c5c5c;
+    --bg: #faf6f5;
+    --card: #ffffff;
+    --line: #e4dcda;
+    --r1: #cfe8fb;
+    --r1-edge: #5aa9e6;
+    --r1-ink: #0f3f66;
+    --r2: #fee0c2;
+    --r2-edge: #ef9a4b;
+    --r2-ink: #6b3407;
+    --live: #167a3c;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px 48px; }
 
+  /* Header */
+  header.hero { background: #fff; border-bottom: 4px solid var(--red); }
+  header.hero .wrap { padding-top: 20px; padding-bottom: 18px; text-align: center; }
+  .logo { width: min(420px, 88%); height: auto; display: block; margin: 0 auto 10px; }
+  h1 { font-size: 1.35rem; margin: 0; letter-spacing: .01em; }
+  .venue-addr { margin: 4px 0 0; color: var(--muted); font-style: italic; }
+  .venue-addr a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .date { margin: 8px 0 0; font-size: 1.15rem; font-weight: 800; font-style: italic; }
+
+  /* Status banner */
+  .status {
+    margin: 16px 0 0;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 6px solid var(--muted);
+    border-radius: 10px;
+  }
+  .status.is-live { border-left-color: var(--live); }
+  .status.is-soon { border-left-color: var(--red); }
+  .status-kicker { font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .status.is-live .status-kicker { color: var(--live); }
+  .status.is-soon .status-kicker { color: var(--red); }
+  .status-main { font-size: 1.05rem; font-weight: 700; margin: 2px 0 0; }
+  .status-sub { margin: 4px 0 0; color: var(--muted); font-size: .93rem; }
+
+  /* Controls */
+  .controls { margin: 16px 0 6px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; background: #fff; overflow: hidden; }
+  .seg button {
+    appearance: none; border: 0; background: transparent; color: var(--ink);
+    font: inherit; font-size: .9rem; font-weight: 600;
+    min-height: 44px; padding: 0 14px; cursor: pointer;
+  }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--red); color: #fff; }
+  .seg button:focus-visible, .btn:focus-visible { outline: 3px solid #1a73e8; outline-offset: 2px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    min-height: 44px; padding: 0 16px; border-radius: 999px;
+    font: inherit; font-size: .9rem; font-weight: 700; text-decoration: none; cursor: pointer;
+    border: 2px solid var(--red); background: #fff; color: var(--red);
+  }
+  .btn.primary { background: var(--red); color: #fff; }
+  .btn:hover { filter: brightness(.96); }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 4px; }
+
+  /* Timeline */
+  .timeline { margin: 14px 0 0; display: grid; gap: 10px; }
+  .slot {
+    position: relative;
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px;
+  }
+  .slot.is-past { opacity: .55; }
+  .slot.is-live { border-color: var(--live); box-shadow: 0 0 0 3px rgba(22,122,60,.18); }
+  .slot.is-next { border-color: var(--red); }
+  .time { font-weight: 800; font-size: .95rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    display: inline-block; font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 999px; color: #fff;
+  }
+  .badge.live { background: var(--live); }
+  .badge.next { background: var(--red); }
+  .body { display: grid; gap: 8px; }
+  .body.two { grid-template-columns: 1fr; }
+
+  .band { text-align: center; padding: 10px 8px; }
+  .band strong { display: block; font-size: 1rem; }
+  .band em { display: block; color: var(--muted); font-size: .92rem; }
+  .band.break { background: #f5f1ef; border-radius: 8px; }
+
+  .cls { border-radius: 10px; padding: 10px 12px; border-left: 6px solid transparent; }
+  .cls.room1 { background: var(--r1); border-left-color: var(--r1-edge); color: var(--r1-ink); }
+  .cls.room2 { background: var(--r2); border-left-color: var(--r2-edge); color: var(--r2-ink); }
+  .cls .room { font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .cls .room small { font-weight: 600; letter-spacing: 0; text-transform: none; font-style: italic; }
+  .cls .style { display: block; font-size: 1.1rem; font-weight: 800; margin-top: 2px; }
+  .cls .inst { display: block; font-size: .95rem; font-weight: 600; }
+
+  @media (min-width: 640px) {
+    .slot { grid-template-columns: 170px 1fr; align-items: center; padding: 12px 14px; }
+    .body.two { grid-template-columns: 1fr 1fr; }
+    h1 { font-size: 1.6rem; }
+  }
+
+  /* Footer */
+  .notes { margin: 22px 0 0; padding: 14px 16px; background: #fff; border: 1px solid var(--line); border-radius: 10px; }
+  .notes p { margin: 0 0 10px; font-style: italic; font-weight: 700; font-size: .93rem; }
+  .notes p:last-child { margin-bottom: 0; }
+  footer { margin-top: 18px; text-align: center; color: var(--muted); font-size: .85rem; }
+  footer a { color: var(--red); }
+  .error { margin: 18px 0; padding: 16px; background: #fff4f4; border: 1px solid #e8b4b4; border-radius: 10px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .slot { transition: box-shadow .2s, border-color .2s, opacity .2s; }
+  }
+  @media print {
+    .controls, .actions, .status { display: none !important; }
+    body { background: #fff; }
+    .slot { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <img class="logo" src="ambition-logo.png" alt="AMBITION One-Day Dance Workshop" width="1434" height="336">
+    <h1 id="venueName">DoubleTree by Hilton Westborough</h1>
+    <p class="venue-addr" id="venueAddr"></p>
+    <p class="date" id="dateLabel"></p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="status" id="status" aria-live="polite" aria-atomic="true" hidden>
+    <div class="status-kicker" id="statusKicker"></div>
+    <p class="status-main" id="statusMain"></p>
+    <p class="status-sub" id="statusSub"></p>
+  </section>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Show classes for">
+      <button type="button" data-room="both" aria-pressed="true">Both rooms</button>
+      <button type="button" data-room="room1" aria-pressed="false" id="btnRoom1">Room 1</button>
+      <button type="button" data-room="room2" aria-pressed="false" id="btnRoom2">Room 2</button>
+    </div>
+  </div>
+  <div class="actions">
+    <button type="button" class="btn primary" id="btnCal">Add to calendar</button>
+    <a class="btn" id="btnPdf" href="ambition-westborough-2026-schedule.pdf" download>Printable PDF</a>
+  </div>
+
+  <div class="timeline" id="timeline" aria-label="Schedule"></div>
+  <div id="errorBox"></div>
+
+  <section class="notes" id="notes" hidden></section>
+
+  <footer>
+    <p id="footerLine"></p>
+  </footer>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var SCHEDULE_URL = 'schedule.json';
+  var REFETCH_MS = 120000;   // re-check schedule.json so edits go live without a resend
+  var TICK_MS = 30000;       // refresh the "now / next" highlight
+
+  var state = { data: null, raw: '', room: 'both', lastChecked: null };
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ---------- helpers ---------- */
+  function toMin(hhmm) { var p = hhmm.split(':'); return Number(p[0]) * 60 + Number(p[1]); }
+  function fmt(hhmm) {
+    var p = hhmm.split(':'), h = Number(p[0]), m = p[1], ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return h + ':' + m + ap;
+  }
+  function rangeLabel(b) { return fmt(b.start) + ' \u2013 ' + fmt(b.end); }
+  function nice(s) {
+    return String(s).toLowerCase()
+      .replace(/(^|[\s\-\/(])([a-z])/g, function (_, a, b) { return a + b.toUpperCase(); })
+      .replace(/\bQ&a\b/g, 'Q&A');
+  }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function roomById(id) {
+    return state.data.rooms.filter(function (r) { return r.id === id; })[0];
+  }
+  function selectedRooms() {
+    return state.room === 'both' ? ['room1', 'room2'] : [state.room];
+  }
+
+  /* ---------- time in the venue's timezone ---------- */
+  function venueNow(tz) {
+    var q = new URLSearchParams(location.search).get('now'); // ?now=2026-11-01T10:30 for previewing
+    if (q && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(q)) {
+      return { date: q.slice(0, 10), min: toMin(q.slice(11, 16)) };
+    }
+    var parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+    }).formatToParts(new Date());
+    var p = {};
+    parts.forEach(function (x) { p[x.type] = x.value; });
+    return { date: p.year + '-' + p.month + '-' + p.day, min: Number(p.hour) * 60 + Number(p.minute) };
+  }
+  function dayNumber(ymd) {
+    var a = ymd.split('-').map(Number);
+    return Math.round(Date.UTC(a[0], a[1] - 1, a[2]) / 86400000);
+  }
+
+  function computeStatus() {
+    var ev = state.data.event, blocks = state.data.blocks;
+    var n = venueNow(ev.timezone);
+    var days = dayNumber(ev.date) - dayNumber(n.date);
+    if (days > 0) return { phase: 'before', days: days };
+    if (days < 0) return { phase: 'after' };
+
+    var idx = -1, i;
+    for (i = 0; i < blocks.length; i++) {
+      if (n.min >= toMin(blocks[i].start) && n.min < toMin(blocks[i].end)) { idx = i; break; }
+    }
+    if (idx >= 0) {
+      return { phase: 'live', idx: idx, minsLeft: toMin(blocks[idx].end) - n.min, nextIdx: idx + 1 < blocks.length ? idx + 1 : -1 };
+    }
+    for (i = 0; i < blocks.length; i++) {
+      if (toMin(blocks[i].start) > n.min) {
+        return { phase: i === 0 ? 'early' : 'gap', nextIdx: i, minsUntil: toMin(blocks[i].start) - n.min };
+      }
+    }
+    return { phase: 'done' };
+  }
+
+  function summary(b) {
+    if (b.type !== 'classes') return nice(b.title);
+    return selectedRooms().map(function (rid) {
+      var c = b[rid], r = roomById(rid);
+      return nice(r.label) + ': ' + nice(c.style) + ' with ' + nice(c.instructor);
+    }).join('  \u00b7  ');
+  }
+  function mins(n) { return n === 1 ? '1 minute' : n + ' minutes'; }
+
+  /* ---------- rendering ---------- */
+  function renderHeader() {
+    var ev = state.data.event;
+    document.title = 'AMBITION ' + ev.city.split(',')[0] + ' Schedule';
+    $('venueName').textContent = ev.venue;
+    var addr = $('venueAddr');
+    addr.textContent = '';
+    var a = el('a', null, ev.address);
+    a.href = 'https://maps.google.com/?q=' + encodeURIComponent(ev.venue + ' ' + ev.address);
+    a.target = '_blank'; a.rel = 'noopener';
+    addr.appendChild(a);
+    $('dateLabel').textContent = ev.city + ' \u2013 ' + ev.dateLabel;
+    state.data.rooms.forEach(function (r) {
+      var b = $(r.id === 'room1' ? 'btnRoom1' : 'btnRoom2');
+      if (b) { b.textContent = nice(r.label); b.setAttribute('aria-label', nice(r.label) + ', ' + r.note); }
+    });
+  }
+
+  function renderStatus(st) {
+    var box = $('status'), blocks = state.data.blocks;
+    box.hidden = false;
+    box.className = 'status';
+    var kicker = '', main = '', sub = '';
+    if (st.phase === 'before') {
+      kicker = 'Coming up';
+      main = st.days === 1 ? 'Tomorrow is the big day!' : st.days + ' days until AMBITION';
+      sub = 'Registration opens at ' + fmt(blocks[0].start) + '.';
+    } else if (st.phase === 'early') {
+      box.classList.add('is-soon');
+      kicker = 'Starting soon';
+      main = 'Registration opens in ' + mins(st.minsUntil);
+      sub = nice(blocks[st.nextIdx].title) + ' \u2013 ' + fmt(blocks[st.nextIdx].start);
+    } else if (st.phase === 'live') {
+      box.classList.add('is-live');
+      kicker = 'Happening now';
+      main = summary(blocks[st.idx]);
+      var nb = st.nextIdx >= 0 ? blocks[st.nextIdx] : null;
+      sub = mins(st.minsLeft) + ' left' + (nb ? '  \u00b7  Next at ' + fmt(nb.start) + ': ' + summary(nb) : '');
+    } else if (st.phase === 'gap') {
+      box.classList.add('is-soon');
+      kicker = 'Up next';
+      main = summary(blocks[st.nextIdx]);
+      sub = 'Starts in ' + mins(st.minsUntil) + ' (' + fmt(blocks[st.nextIdx].start) + ')';
+    } else if (st.phase === 'done') {
+      kicker = 'That\u2019s a wrap';
+      main = 'Thank you for dancing with us!';
+      sub = '';
+    } else {
+      kicker = 'Event complete';
+      main = 'Thank you for joining AMBITION!';
+      sub = '';
+    }
+    $('statusKicker').textContent = kicker;
+    $('statusMain').textContent = main;
+    $('statusSub').textContent = sub;
+    $('statusSub').hidden = !sub;
+  }
+
+  function renderTimeline(st) {
+    var tl = $('timeline'), blocks = state.data.blocks, rooms = selectedRooms();
+    tl.textContent = '';
+    blocks.forEach(function (b, i) {
+      var slot = el('article', 'slot');
+      var isLive = st.phase === 'live' && st.idx === i;
+      var isNext = (st.phase === 'live' && st.nextIdx === i) || ((st.phase === 'early' || st.phase === 'gap') && st.nextIdx === i);
+      var isPast = (st.phase === 'done' || st.phase === 'after') ||
+                   (st.phase === 'live' && i < st.idx) ||
+                   ((st.phase === 'gap' || st.phase === 'early') && i < st.nextIdx);
+      if (isLive) { slot.classList.add('is-live'); slot.setAttribute('aria-current', 'time'); }
+      if (isNext) slot.classList.add('is-next');
+      if (isPast) slot.classList.add('is-past');
+
+      var time = el('div', 'time', rangeLabel(b));
+      if (isLive) time.appendChild(el('span', 'badge live', 'Now'));
+      else if (isNext) time.appendChild(el('span', 'badge next', 'Next'));
+      slot.appendChild(time);
+
+      var body = el('div', 'body');
+      if (b.type === 'classes') {
+        if (rooms.length === 2) body.classList.add('two');
+        rooms.forEach(function (rid) {
+          var c = b[rid], r = roomById(rid);
+          var card = el('div', 'cls ' + rid);
+          var label = el('div', 'room', r.label + ' ');
+          label.appendChild(el('small', null, '(' + r.note + ')'));
+          card.appendChild(label);
+          card.appendChild(el('span', 'style', c.style));
+          card.appendChild(el('span', 'inst', c.instructor));
+          body.appendChild(card);
+        });
+      } else {
+        var band = el('div', 'band' + (b.type === 'break' ? ' break' : ''));
+        band.appendChild(el('strong', null, b.title));
+        if (b.detail) band.appendChild(el('em', null, b.detail));
+        body.appendChild(band);
+      }
+      slot.appendChild(body);
+      tl.appendChild(slot);
+    });
+  }
+
+  function renderFooter() {
+    var notes = $('notes'), ev = state.data.event;
+    notes.textContent = '';
+    (state.data.footnotes || []).forEach(function (t) { notes.appendChild(el('p', null, t)); });
+    notes.hidden = !(state.data.footnotes && state.data.footnotes.length);
+    var f = $('footerLine');
+    f.textContent = 'Questions? ';
+    var a = el('a', null, ev.contact);
+    a.href = 'mailto:' + ev.contact;
+    f.appendChild(a);
+    if (state.lastChecked) {
+      f.appendChild(document.createTextNode(' \u00b7 Schedule checked ' + state.lastChecked));
+    }
+  }
+
+  function render() {
+    if (!state.data) return;
+    var st = computeStatus();
+    renderStatus(st);
+    renderTimeline(st);
+    renderFooter();
+  }
+
+  /* ---------- calendar (.ics) ---------- */
+  function foldLine(s) {
+    var out = '', i = 0;
+    while (s.length - i > 73) { out += s.substr(i, 73) + '\r\n '; i += 73; }
+    return out + s.substr(i);
+  }
+  function esc(s) { return String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n'); }
+  function dt(date, hhmm) { return date.replace(/-/g, '') + 'T' + hhmm.replace(':', '') + '00'; }
+  function stamp() { return new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); }
+
+  function buildICS() {
+    var ev = state.data.event, L = [];
+    L.push('BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//WCTE//AMBITION Schedule//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+      'X-WR-CALNAME:AMBITION ' + esc(ev.city),
+      'BEGIN:VTIMEZONE', 'TZID:' + ev.timezone,
+      'BEGIN:DAYLIGHT', 'TZOFFSETFROM:-0500', 'TZOFFSETTO:-0400', 'TZNAME:EDT', 'DTSTART:19700308T020000', 'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU', 'END:DAYLIGHT',
+      'BEGIN:STANDARD', 'TZOFFSETFROM:-0400', 'TZOFFSETTO:-0500', 'TZNAME:EST', 'DTSTART:19701101T020000', 'RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU', 'END:STANDARD',
+      'END:VTIMEZONE');
+    var loc = ev.venue + ', ' + ev.address, now = stamp();
+    state.data.blocks.forEach(function (b, i) {
+      var items = [];
+      if (b.type === 'classes') {
+        selectedRooms().forEach(function (rid) {
+          var c = b[rid], r = roomById(rid);
+          items.push({ uid: rid, title: nice(c.style) + ' with ' + nice(c.instructor) + ' (' + nice(r.label) + ')', desc: nice(r.label) + ' \u2013 ' + r.note });
+        });
+      } else {
+        items.push({ uid: 'all', title: nice(b.title), desc: b.detail ? nice(b.detail.replace(/[()]/g, '')) : '' });
+      }
+      items.forEach(function (it) {
+        L.push('BEGIN:VEVENT',
+          'UID:ambition-' + ev.date + '-' + i + '-' + it.uid + '@wctedance.com',
+          'DTSTAMP:' + now,
+          'DTSTART;TZID=' + ev.timezone + ':' + dt(ev.date, b.start),
+          'DTEND;TZID=' + ev.timezone + ':' + dt(ev.date, b.end),
+          'SUMMARY:' + esc('AMBITION: ' + it.title),
+          'LOCATION:' + esc(loc));
+        if (it.desc) L.push('DESCRIPTION:' + esc(it.desc));
+        L.push('END:VEVENT');
+      });
+    });
+    L.push('END:VCALENDAR');
+    return L.map(foldLine).join('\r\n') + '\r\n';
+  }
+
+  function downloadICS() {
+    if (!state.data) return;
+    var blob = new Blob([buildICS()], { type: 'text/calendar;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'ambition-westborough-2026.ics';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  }
+
+  /* ---------- data loading ---------- */
+  function showError() {
+    var box = $('errorBox');
+    box.textContent = '';
+    var d = el('div', 'error');
+    d.appendChild(el('strong', null, 'We couldn\u2019t load the live schedule right now.'));
+    d.appendChild(el('p', null, 'Please use the printable PDF below, or check your connection and refresh.'));
+    box.appendChild(d);
+  }
+
+  function load(first) {
+    fetch(SCHEDULE_URL, { cache: 'no-cache' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+      .then(function (txt) {
+        var changed = txt !== state.raw;
+        state.lastChecked = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        if (changed) {
+          state.data = JSON.parse(txt);
+          state.raw = txt;
+          $('errorBox').textContent = '';
+          renderHeader();
+        }
+        render();
+      })
+      .catch(function () { if (first && !state.data) showError(); });
+  }
+
+  /* ---------- wire up ---------- */
+  document.querySelectorAll('.seg button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.room = b.getAttribute('data-room');
+      document.querySelectorAll('.seg button').forEach(function (x) {
+        x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+      });
+      render();
+    });
+  });
+  $('btnCal').addEventListener('click', downloadICS);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { load(false); } });
+
+  load(true);
+  setInterval(render, TICK_MS);
+  setInterval(function () { load(false); }, REFETCH_MS);
+})();
+</script>
+</body>
+</html>
