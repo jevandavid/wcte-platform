@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AMBITION Westborough Schedule</title>
-<meta name="description" content="Live schedule for the AMBITION One-Day Dance Workshop at the DoubleTree by Hilton Westborough, Sunday, Nov 1, 2026.">
+<title>AMBITION Virginia Beach Schedule</title>
+<meta name="description" content="Live schedule for the AMBITION One-Day Dance Workshop at the Virginia Beach Convention Center, Sunday, Nov 8, 2026.">
 <meta name="theme-color" content="#b01c1c">
 <style>
   :root {
@@ -42,6 +42,7 @@
   h1 { font-size: 1.35rem; margin: 0; letter-spacing: .01em; }
   .venue-addr { margin: 4px 0 0; color: var(--muted); font-style: italic; }
   .venue-addr a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .venue-room { margin: 2px 0 0; font-weight: 700; }
   .date { margin: 8px 0 0; font-size: 1.15rem; font-weight: 800; font-style: italic; }
 
   /* Status banner */
@@ -145,8 +146,9 @@
 <header class="hero">
   <div class="wrap">
     <img class="logo" src="ambition-logo.png" alt="AMBITION One-Day Dance Workshop" width="1434" height="336">
-    <h1 id="venueName">DoubleTree by Hilton Westborough</h1>
+    <h1 id="venueName">Virginia Beach Convention Center</h1>
     <p class="venue-addr" id="venueAddr"></p>
+    <p class="venue-room" id="venueRoom" hidden></p>
     <p class="date" id="dateLabel"></p>
   </div>
 </header>
@@ -167,7 +169,7 @@
   </div>
   <div class="actions">
     <button type="button" class="btn primary" id="btnCal">Add to calendar</button>
-    <a class="btn" id="btnPdf" href="ambition-westborough-2026-schedule.pdf" download>Printable PDF</a>
+    <a class="btn" id="btnPdf" href="ambition-virginia-beach-2026-schedule.pdf" download>Printable PDF</a>
   </div>
 
   <div class="timeline" id="timeline" aria-label="Schedule"></div>
@@ -278,6 +280,9 @@
     a.href = 'https://maps.google.com/?q=' + encodeURIComponent(ev.venue + ' ' + ev.address);
     a.target = '_blank'; a.rel = 'noopener';
     addr.appendChild(a);
+    var rm = $('venueRoom');
+    if (rm) { rm.textContent = ev.room || ''; rm.hidden = !ev.room; }
+    if (ev.pdf) { var bp = $('btnPdf'); if (bp) bp.setAttribute('href', ev.pdf); }
     $('dateLabel').textContent = ev.city + ' \u2013 ' + ev.dateLabel;
     state.data.rooms.forEach(function (r) {
       var b = $(r.id === 'room1' ? 'btnRoom1' : 'btnRoom2');
@@ -441,7 +446,7 @@
     var blob = new Blob([buildICS()], { type: 'text/calendar;charset=utf-8' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    a.href = url; a.download = 'ambition-westborough-2026.ics';
+    a.href = url; a.download = (state.data.event.icsName || 'ambition-schedule.ics');
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
   }
