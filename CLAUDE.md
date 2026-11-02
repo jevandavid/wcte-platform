@@ -276,6 +276,19 @@ All five files live in `ambition/` in the `wcte-platform` repo.
 
 ---
 
+## Planned Next Project: Fold Emailers into the WCTE Staff Hosted App (not started)
+
+Decided Nov 2, 2026 by Jevan. The Regional/Nationals and AMBITION emailers are standalone files today. The next project merges them into the **WCTE Staff Hosted app** (still being built), because that app holds the studio data. Scope:
+
+- **Studio data comes from the app**, replacing the Excel/CSV import in the standalone emailers.
+- **Triggered auto-emails:** the app should send reminders and event information to studios automatically, based on **trigger sets** (e.g. dates relative to an event), not only manual bulk sends. Trigger-set design is open; capture requirements before building.
+- **Hosting/security:** the sender lives behind staff login in the app, so the "do not host the sender publicly" rule is satisfied by authentication, not by keeping files local.
+- **Portable pieces already built to be data-driven:** per-event `schedule.json` (schedule, footnotes, `letter` block, `event.pdf`, `event.room`, `icsName`), `buildAmbitionEmail()`, and the live schedule page. Nationals/Regional templates are three flat builder functions (see Email Templates) and stay content-faithful.
+- **Keep:** same EmailJS Service ID/Public Key, per-template IDs (`template_rv6agoo` shell for Regional/Nationals; `template_ffuw20g` for AMBITION with the `schedule_pdf` Variable Attachment), the 50KB payload ceiling, and the content-fidelity rules.
+- **Open questions for the build:** where per-event content lives (database vs JSON files in the hub repo), how trigger sets are authored and scheduled (server-side scheduler vs staff-triggered runs, since EmailJS sends from the browser), unsubscribe/duplicate-send protection, and a send log shared across events.
+
+---
+
 ## Related Files in This Project
 
 | File | Notes |
@@ -308,4 +321,4 @@ Sending address: `info@wctedance.com` (configured in EmailJS service)
 
 ---
 
-*Last updated: November 2, 2026 (live page and sender switched to Virginia Beach, Nov 8). Earlier: October 26, 2026 (AMBITION cover letter folded into the email and moved into schedule.json; Excel/CSV file import added to both emailers). Earlier: October 25, 2026 — AMBITION emailer and live schedule page added and live-tested; Nationals Event Overview and Sandler parking download buttons documented; Virginia Beach payload now ~49.2KB (~98% of limit); Module 3 send-log Event column bug fixed. Next: real AMBITION send to studio directors (Nov 1 event), then archive and reuse the AMBITION pattern for future one-day events.*
+*Last updated: November 2, 2026 (live page and sender switched to Virginia Beach, Nov 8). Earlier: October 26, 2026 (AMBITION cover letter folded into the email and moved into schedule.json; Excel/CSV file import added to both emailers). Earlier: October 25, 2026 — AMBITION emailer and live schedule page added and live-tested; Nationals Event Overview and Sandler parking download buttons documented; Virginia Beach payload now ~49.2KB (~98% of limit); Module 3 send-log Event column bug fixed. Next: AMBITION Virginia Beach send (Nov 8), then the Staff Hosted app project (see Planned Next Project).*
